@@ -1,0 +1,12 @@
+target
+bin
+build
+.gradle
+.classpath
+.project
+.settings/
+out/
+*.iml
+*.iws
+*.ipr
+db/testing.trace.db
