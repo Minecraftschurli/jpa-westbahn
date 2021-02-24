@@ -5,6 +5,11 @@ plugins {
 	id 'idea'
 }
 
+repositories {
+	jcenter()
+	mavenCentral()
+}
+
 dependencies {
 	compile 'com.google.guava:guava:23.0'
 	testCompile 'junit:junit:4.12'
@@ -16,10 +21,12 @@ dependencies {
 	runtime group: 'org.hibernate', name: 'hibernate-core', version: '5.4.1.Final'
 	runtime group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.1.Final'
 	compile group: 'com.h2database', name: 'h2', version: '1.4.197'
-}
 
-repositories {
-	jcenter()
+	compileOnly 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.16'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 }
 
 mainClassName = 'main.Main'

@@ -7,9 +7,15 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   <persistence-unit name="westbahn">
     <description> Hibernate JPA Configuration Example</description>
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
-      <!-- TODO List all perstiting Classdefinitions -->
-
+    <mapping-file>reservierung.xml</mapping-file>
+    <class>model.Einzelticket</class>
+    <class>model.Bahnhof</class>
+    <class>model.Benutzer</class>
+    <class>model.Sonderangebot</class>
+    <class>model.Strecke</class>
+    <class>model.Ticket</class>
+    <class>model.Zeitkarte</class>
+    <class>model.Zug</class>
     <properties>
       <!--
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
