@@ -3,21 +3,21 @@
 <entity class="model.Reservierung">
     <attributes>
         <id name="ID">
-            <column name="id"/>
+            <column name="id" nullable="false"/>
             <generated-value strategy="AUTO"/>
         </id>
         <basic name="datum">
-            <column/>
+            <column nullable="false"/>
         </basic>
         <basic name="praemienMeilenBonus">
-            <column/>
+            <column nullable="false"/>
         </basic>
         <basic name="preis">
-            <column/>
+            <column nullable="false"/>
         </basic>
         <basic name="status">
-            <column/>
-            <enumerated>STRING</enumerated>
+            <column nullable="false"/>
+            <enumerated>ORDINAL</enumerated>
         </basic>
         <many-to-one name="zug">
             <foreign-key name="zug_id"/>

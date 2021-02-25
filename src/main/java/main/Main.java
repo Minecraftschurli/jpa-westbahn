@@ -2,10 +2,8 @@ package main;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 import javax.persistence.*;
 import javax.validation.ConstraintViolation;
@@ -13,11 +11,12 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.*;
 
 import model.*;
+import org.apache.log4j.spi.ErrorHandler;
+import org.apache.log4j.spi.Filter;
+import org.apache.log4j.spi.LoggingEvent;
 
 public class Main {
 
@@ -38,6 +37,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		BasicConfigurator.configure();
+		Logger.getRootLogger().setLevel(Level.INFO);
 		
 		try {
 			log.info("Starting \"Mapping Perstistent Classes and Associations\" (task1)");
@@ -46,12 +46,10 @@ public class Main {
 			fillDB(entitymanager);
 			task01();
 			log.info("Starting \"Working with JPA-QL and the Hibernate Criteria API\" (task2)");
-			log.setLevel(Level.OFF);
 			task02();
 			task02a();
 			task02b();
 			task02c();
-			log.setLevel(Level.ALL);
 			task03(entitymanager);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -81,6 +79,54 @@ public class Main {
 	}
 
 	public static void task01() throws ParseException, InterruptedException {
+		entitymanager.getTransaction().begin();
+		TypedQuery<Bahnhof> q = entitymanager.createQuery("SELECT b FROM Bahnhof b WHERE b.name = :name", Bahnhof.class);
+		Bahnhof wien = q.setParameter("name", "WienHbf").getSingleResult();
+		Bahnhof wels = q.setParameter("name", "Wels-Zentrum").getSingleResult();
+		Bahnhof linz = q.setParameter("name", "Linz-Ost").getSingleResult();
+		List<Object> list = new LinkedList<>();
+		Benutzer gburkl = Benutzer.builder()
+				.withVorName("Georg")
+				.withNachName("Burkl")
+				.withEMail("gburkl@student.tgm.ac.at")
+				.withPasswort("bla1234")
+				.withSmsNummer("+4369966996699")
+				.build();
+		list.add(gburkl);
+		Strecke s = Strecke.builder()
+				.withStart(wien)
+				.withEnde(wels)
+				.build();
+		list.add(s);
+		Zug z = Zug.builder()
+				.withStart(wien)
+				.withEnde(linz)
+				.withFahrradStellplaetze(10)
+				.withRollStuhlPlaetze(4)
+				.withSitzPlaetze(120)
+				.withStartZeit(new Date())
+				.build();
+		list.add(z);
+		Reservierung r = Reservierung.builder()
+				.withBenutzer(gburkl)
+				.withDatum(new Date())
+				.withStrecke(s)
+				.withStatus(StatusInfo.ONTIME)
+				.withZug(z)
+				.build();
+		list.add(r);
+		Zeitkarte mk = Zeitkarte.builder()
+				.withGueltigAb(dateForm.parse("24.02.2021"))
+				.withGueltigBis(dateForm.parse("24.03.2021"))
+				.withTyp(ZeitkartenTyp.MONATSKARTE)
+				.withBenutzer(gburkl)
+				.withStrecke(s)
+				.build();
+		list.add(mk);
+		for (Object o : list)
+			entitymanager.persist(o);
+		entitymanager.flush();
+		entitymanager.getTransaction().commit();
 	}
 
 	public static <T> void task02() throws ParseException {
@@ -92,15 +138,22 @@ public class Main {
 			Bahnhof bhf = null;
 			if (b instanceof Bahnhof) {
 				bhf = (Bahnhof) b;
-				System.out.println("Bahnhof: " + bhf.getName());
+				log.info("Bahnhof: " + bhf.getName());
 			}
 		}
 	}
 
 	public static void task02a() throws ParseException {
+		entitymanager.createNamedQuery("Benutzer.getReservierungenByEmail", Reservierung.class)
+				.setParameter("email", "gburkl@student.tgm.ac.at")
+				.getResultList()
+				.forEach(log::info);
 	}
 
 	public static void task02b() throws ParseException {
+		entitymanager.createNamedQuery("Benutzer.getAllWithMonatskarte", Benutzer.class)
+				.getResultList()
+				.forEach(log::info);
 	}
 
 	public static void task02c() throws ParseException {
