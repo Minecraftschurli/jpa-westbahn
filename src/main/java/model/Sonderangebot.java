@@ -1,32 +1,44 @@
 package model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.Past;
 import java.util.Collection;
 import java.util.Date;
 
 @Data
 @Entity
+@Builder(setterPrefix = "with")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sonderangebot {
 
-	@Id
-	@GeneratedValue(strategy= GenerationType.AUTO)
-	@Column(name="id")
-	@EqualsAndHashCode.Include
-	private Long ID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    @EqualsAndHashCode.Include
+    @Nullable
+    private Long ID;
 
-	private int kontingent = 999;
+    @Builder.Default
+    private int kontingent = 999;
 
-	private Date startZeit;
+    @NonNull
+    @FutureOrPresent(message = "Die startZeit des Sonderangebots darf nicht in der Vergangenheit liegen!")
+    private Date startZeit;
 
-	private int dauer = 12;
+    @Builder.Default
+    private int dauer = 12;
 
-	private float preisNachlass = 0.5f;
+    @Builder.Default
+    private float preisNachlass = 0.5f;
 
-	@OneToMany
-	private Collection<Ticket> tickets;
+    @Singular
+    @OneToMany(mappedBy = "sonderangebot")
+    private Collection<Ticket> tickets;
 
 }

@@ -1,5 +1,5 @@
 package model;
 
 public enum TicketOption {
-	FAHRRAD, GROSSGEPAECK;
+    FAHRRAD, GROSSGEPAECK
 }

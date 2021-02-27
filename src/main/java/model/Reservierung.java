@@ -14,32 +14,32 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservierung {
 
-	@Nullable
-	@EqualsAndHashCode.Include
-	private Long ID;
+    @Nullable
+    @EqualsAndHashCode.Include
+    private Long ID;
 
-	@NonNull
-	private Date datum;
+    @NonNull
+    private Date datum;
 
-	@Builder.Default
-	private int praemienMeilenBonus = 15;
+    @Builder.Default
+    private int praemienMeilenBonus = 15;
 
-	@Builder.Default
-	private int preis = 150;
+    @Builder.Default
+    private int preis = 150;
 
-	@NonNull
-	@Enumerated(EnumType.ORDINAL)
-	private StatusInfo status;
+    @NonNull
+    @Enumerated(EnumType.ORDINAL)
+    private StatusInfo status;
 
-	@NonNull
-	private Zug zug;
+    @NonNull
+    private Zug zug;
 
-	@NonNull
-	private Strecke strecke;
+    @NonNull
+    private Strecke strecke;
 
-	@NonNull
-	private Benutzer benutzer;
+    @NonNull
+    private Benutzer benutzer;
 
-	private Zahlung zahlung;
+    private Zahlung zahlung;
 
 }

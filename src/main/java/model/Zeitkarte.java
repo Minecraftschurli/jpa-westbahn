@@ -16,14 +16,14 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Zeitkarte extends Ticket {
 
-	@NonNull
-	private Date gueltigAb;
+    @NonNull
+    private Date gueltigAb;
 
-	@NonNull
-	private Date gueltigBis;
+    @NonNull
+    private Date gueltigBis;
 
-	@NonNull
-	@Enumerated(EnumType.ORDINAL)
-	private ZeitkartenTyp typ;
+    @NonNull
+    @Enumerated(EnumType.ORDINAL)
+    private ZeitkartenTyp typ;
 
 }

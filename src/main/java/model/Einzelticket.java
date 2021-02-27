@@ -14,8 +14,8 @@ import javax.persistence.Enumerated;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Einzelticket extends Ticket {
 
-	@NonNull
-	@Enumerated(EnumType.ORDINAL)
-	private TicketOption ticketOption;
+    @NonNull
+    @Enumerated(EnumType.ORDINAL)
+    private TicketOption ticketOption;
 
 }
