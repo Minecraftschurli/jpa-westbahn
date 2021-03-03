@@ -80,3 +80,13 @@ class Xyz {
 ```
 
 ## Quellen
+- https://docs.oracle.com/javaee/7/api/javax/persistence/OneToOne.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/OneToMany.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/ManyToOne.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/ManyToMany.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/UniqueConstraint.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/Inheritance.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/InheritanceType.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/Enumerated.html
+- https://docs.oracle.com/javaee/7/api/javax/persistence/EnumType.html
+- https://www.baeldung.com/jpa-persisting-enums-in-jpa
