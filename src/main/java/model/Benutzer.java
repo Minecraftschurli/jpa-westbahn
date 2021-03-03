@@ -5,11 +5,11 @@ import lombok.*;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
-@Builder(setterPrefix = "with")
 @NamedQueries({
     @NamedQuery(name = "Benutzer.getReservierungenByEmail", query = """
     SELECT DISTINCT r FROM Benutzer b
@@ -24,7 +24,6 @@ import java.util.Collection;
     """)
 })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Benutzer {
 
@@ -57,14 +56,25 @@ public class Benutzer {
 
     private Long gesamtPraemienMeilen;
 
-    @ToString.Exclude
-    @Singular("ticket")
-    @OneToMany(mappedBy = "benutzer")
-    private Collection<Ticket> tickets;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tickets")
+    private Set<Ticket> tickets;
 
     @ToString.Exclude
-    @Singular("reservierung")
     @OneToMany(mappedBy = "benutzer")
-    private Collection<Reservierung> reservierungen;
+    private Set<Reservierung> reservierungen;
 
+    public Benutzer(@NonNull String vorName,
+                    @NonNull String nachName,
+                    @NonNull String eMail,
+                    @NonNull String passwort,
+                    @NonNull String smsNummer) {
+        this.vorName = vorName;
+        this.nachName = nachName;
+        this.eMail = eMail;
+        this.passwort = passwort;
+        this.smsNummer = smsNummer;
+        this.tickets = new HashSet<>();
+        this.reservierungen = new HashSet<>();
+    }
 }

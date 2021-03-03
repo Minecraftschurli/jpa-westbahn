@@ -85,25 +85,18 @@ public class Main {
         Bahnhof wien = q.setParameter("name", "WienHbf").getSingleResult();
         Bahnhof wels = q.setParameter("name", "Wels-Zentrum").getSingleResult();
         Bahnhof linz = q.setParameter("name", "Linz-Ost").getSingleResult();
-        List<Object> list = new LinkedList<>();
-        Benutzer gburkl = Benutzer.builder()
-                .withVorName("Georg")
-                .withNachName("Burkl")
-                .withEMail("gburkl@student.tgm.ac.at")
-                .withPasswort("bla1234")
-                .withSmsNummer("+4369966996699")
-                .build();
-        list.add(gburkl);
+        Benutzer gburkl = new Benutzer("Georg", "Burkl", "gburkl@student.tgm.ac.at", "bla1234","+4369966996699");
+        entitymanager.persist(gburkl);
         Strecke s = Strecke.builder()
                 .withStart(wien)
                 .withEnde(wels)
                 .build();
-        list.add(s);
+        entitymanager.persist(s);
         Strecke s2 = Strecke.builder()
                 .withStart(wien)
                 .withEnde(linz)
                 .build();
-        list.add(s2);
+        entitymanager.persist(s2);
         Zug z = Zug.builder()
                 .withStart(wien)
                 .withEnde(linz)
@@ -112,7 +105,7 @@ public class Main {
                 .withSitzPlaetze(120)
                 .withStartZeit(new Date())
                 .build();
-        list.add(z);
+        entitymanager.persist(z);
         Reservierung r = Reservierung.builder()
                 .withBenutzer(gburkl)
                 .withDatum(new Date())
@@ -120,23 +113,21 @@ public class Main {
                 .withStatus(StatusInfo.ONTIME)
                 .withZug(z)
                 .build();
-        list.add(r);
+        entitymanager.persist(r);
         Zeitkarte mk = Zeitkarte.builder()
                 .withGueltigAb(dateForm.parse("24.02.2021"))
                 .withGueltigBis(dateForm.parse("24.03.2021"))
                 .withTyp(ZeitkartenTyp.MONATSKARTE)
                 .withStrecke(s)
-                .withBenutzer(gburkl)
                 .build();
-        list.add(mk);
+        gburkl.getTickets().add(mk);
+        entitymanager.persist(mk);
         Einzelticket et = Einzelticket.builder()
-                .withBenutzer(gburkl)
                 .withStrecke(s2)
                 .withTicketOption(TicketOption.FAHRRAD)
                 .build();
-        list.add(et);
-        for (Object o : list)
-            entitymanager.persist(o);
+        gburkl.getTickets().add(et);
+        entitymanager.persist(et);
         entitymanager.flush();
         entitymanager.getTransaction().commit();
     }
@@ -205,28 +196,12 @@ public class Main {
                 .build());
         //endregion
         //region Benutzer
-        list.add(Benutzer.builder()
-                .withEMail("valid@email.com")
-                .withNachName("test")
-                .withVorName("test")
-                .withPasswort("test")
-                .withSmsNummer("+430000000000")
-                .build());
-        list.add(Benutzer.builder()
-                .withEMail("not-valid")
-                .withNachName("test")
-                .withVorName("test")
-                .withPasswort("test")
-                .withSmsNummer("+430000000000")
-                .build());
+        list.add(new Benutzer("valid@email.com", "test", "test","test","+430000000000"));
+        list.add(new Benutzer("not-valid", "test", "test", "test", "+430000000000"));
         //endregion
         //region Sonderangebot
-        list.add(Sonderangebot.builder()
-                .withStartZeit(dateForm.parse("26.03.2021"))
-                .build());
-        list.add(Sonderangebot.builder()
-                .withStartZeit(dateForm.parse("01.01.2021"))
-                .build());
+        list.add(new Sonderangebot(dateForm.parse("26.03.2021")));
+        list.add(new Sonderangebot(dateForm.parse("01.01.2021")));
         //endregion
         //region Bahnhof
         list.add(new Bahnhof("aaa", 0, 0, 0, false));

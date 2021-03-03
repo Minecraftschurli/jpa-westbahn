@@ -9,9 +9,9 @@ import javax.persistence.*;
 @Data
 @Entity
 @SuperBuilder(setterPrefix = "with")
+@Inheritance(strategy = InheritanceType.JOINED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamedQueries({
     @NamedQuery(name = "Ticket.getWithoutReservierungForStrecke", query = """
     SELECT DISTINCT t FROM Benutzer b
@@ -30,20 +30,9 @@ public abstract class Ticket {
     @EqualsAndHashCode.Include
     protected Long ID;
 
-    //TODO move to Einzelticket
     @NonNull
     @ManyToOne(optional = false)
     protected Strecke strecke;
-
-    //TODO fix assoziation
-	@NonNull
-	@ManyToOne
-	protected Benutzer benutzer;
-
-    //TODO fix assoziation
-	@Nullable
-	@ManyToOne
-	protected Sonderangebot sonderangebot;
 
     @Transient
     protected Zahlung zahlung;
